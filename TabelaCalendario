@@ -1,0 +1,22 @@
+(DataInicial as date, DataFinal as date)=>
+let
+    //DataInicial = #date(2017,1,1),
+    //DataFinal = #date(2020,12,31),
+    QtdDias = Duration.Days(DataFinal - DataInicial) + 1,
+    Datas = List.Dates(DataInicial,QtdDias,#duration(1,0,0,0)), //1 dia 0 horas 0 minutos 0 seundos
+    Cabecalho = type table[Data = date, Ano = Int32.Type, Nome do Mês = text, Mês = Int32.Type,Trimestre = Int32.Type, Dia da Semana = Int32.Type, Nome Dia da Semana = text],
+    Registros = List.Transform(
+        Datas,
+        each { 
+            _ ,
+            Date.Year(_),
+            Date.MonthName(_),
+            Date.Month(_),
+            "TR" & Text.From(Date.QuarterOfYear(_)),
+            Date.DayOfWeek(_),
+            Date.DayOfWeekName(_)
+         }
+    ),
+    Tabela = #table(Cabecalho,Registros)
+in
+    Tabela
